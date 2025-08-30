@@ -9,7 +9,9 @@ export function AppProviders({ children }: Props) {
   return (
     <ReduxProvider>
       <RouterProvider>
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          {children}
+        </ThemeProvider>
       </RouterProvider>
     </ReduxProvider>
   );

@@ -1,19 +1,27 @@
-// modules/auth/hooks.ts
+// Redux
 import { useDispatch, useSelector } from "react-redux";
-import type { RootState } from "@/app/store";
-import { loginRequest, logout } from "./slice";
 
+// Store
+import type { RootState } from "@/app/store";
+
+// Slices
+import { loginRequest, logout } from "./auth.slice";
+
+
+// Hooks
 export function useAuth() {
   return useSelector((state: RootState) => state.auth);
 }
 
 export function useLogin() {
   const dispatch = useDispatch();
-  return (payload: { email: string; password: string }) =>
+  return (payload: { email: string; password: string }) => {
     dispatch(loginRequest(payload));
+  }
 }
-
+ 
 export function useLogout() {
   const dispatch = useDispatch();
   return () => dispatch(logout());
 }
+

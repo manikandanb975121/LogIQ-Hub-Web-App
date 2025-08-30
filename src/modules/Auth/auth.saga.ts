@@ -1,23 +1,25 @@
 // modules/auth/sagas.ts
 import { call, put, takeLatest } from "redux-saga/effects";
-import { loginApi } from "@/services/auth.api";
+import { login } from "@/services/auth.api";
 import { loginRequest, loginSuccess, loginFailure } from "./auth.slice";
 
-function* handleLogin(action: ReturnType<typeof loginRequest>): Generator {
+function* loginHandler(action: ReturnType<typeof loginRequest>): Generator {
   try {
-    const response: any = yield call(loginApi, action.payload);
+    const response: any = yield call(login, action.payload);
     yield put(
       loginSuccess({
-        user: response.data.user,
-        token: response.data.token,
+        user: response.data
       })
     );
     localStorage.setItem("access_token", response.data.token);
+    localStorage.setItem("session_id", response.data.sessionId);
   } catch (error: any) {
-    yield put(loginFailure(error.response?.data?.message || "Login failed"));
+    yield put(loginFailure({message: error.response?.data?.message || "Login failed"}));
   }
 }
 
+
+// Auth Saga
 export function* authSaga() {
-  yield takeLatest(loginRequest.type, handleLogin);
+  yield takeLatest(loginRequest.type, loginHandler);
 }

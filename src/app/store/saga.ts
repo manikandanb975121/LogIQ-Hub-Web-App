@@ -1,9 +1,11 @@
 import { all, fork } from "redux-saga/effects";
-// Example: import authSaga from "@/modules/auth/sagas";
+
+// Auth Saga
+import { authSaga } from "@/modules/Auth/auth.saga";
 
 export default function* rootSaga() {
   yield all([
-    // fork(authSaga),
+    fork(authSaga),
     // fork(userSaga),
   ]);
 }

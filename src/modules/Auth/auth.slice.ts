@@ -1,16 +1,19 @@
 // modules/auth/slice.ts
+import type { ILoginResponse } from "@/services/types/response";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 type AuthState = {
-  user: null | { id: string; email: string };
+  user: ILoginResponse | Object | null;
   token: string | null;
+  sessionId: string | null;
   loading: boolean;
   error: string | null;
 };
 
 const initialState: AuthState = {
-  user: null,
-  token: null,
+  user: {},
+  token: '',
+  sessionId: '',
   loading: false,
   error: null,
 };
@@ -23,14 +26,15 @@ const authSlice = createSlice({
       state.loading = true;
       state.error = null;
     },
-    loginSuccess: (state, action: PayloadAction<{ user: any; token: string }>) => {
+    loginSuccess: (state, action: PayloadAction<{ user: ILoginResponse }>) => {
       state.loading = false;
       state.user = action.payload.user;
-      state.token = action.payload.token;
+      state.token = action.payload.user.token;
+      state.sessionId = action.payload.user.sessionId
     },
-    loginFailure: (state, action: PayloadAction<string>) => {
+    loginFailure: (state, action: PayloadAction<{ message: string}>) => {
       state.loading = false;
-      state.error = action.payload;
+      state.error = action.payload.message;
     },
     logout: (state) => {
       state.user = null;
